@@ -1,0 +1,37 @@
+# Virtual environment
+venv/
+env/
+*.pyc
+__pycache__/
+
+# IDE and Editor files
+.vscode/
+*.swp
+*.swo
+.idea/
+*.iml
+
+# Logs and temp files
+logs/
+*.log
+*.pid
+
+# Config and secrets (avoid committing sensitive data)
+.env
+config.py
+instance/
+
+# Dependency cache
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Pytest and coverage reports
+htmlcov/
+.coverage
+*.cover
+.cache
+nosetests.xml
+coverage.xml
+
+# Database files
+*.sqlite3
