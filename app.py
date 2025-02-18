@@ -3,6 +3,7 @@ import tensorflow as tf
 from tensorflow.keras.preprocessing import image
 import numpy
 import os
+from geminiResponse import get_instructions
 
 app = Flask(__name__)
 
@@ -35,10 +36,11 @@ def predict():
     predictions = model.predict(img_array)
     predicted_class = class_names[numpy.argmax(predictions)]
     confidence = float(numpy.max(predictions))
+    instructions = get_instructions("Tomato", predicted_class)
 
     os.remove(file_path)
 
-    return jsonify({"class": predicted_class, "confidence": confidence})
+    return jsonify({"class": predicted_class, "confidence": confidence, "instructions": instructions})
 
 if __name__ == "__main__":
     app.run(debug=True)
