@@ -24,6 +24,7 @@ def predict():
         return jsonify({'error': 'No file part'}), 400
 
     file = request.files['file']
+    plant = request.form.get('plant')
 
     if not file or file.filename == '':
         return jsonify({'error': 'No selected file'}), 400
@@ -36,7 +37,7 @@ def predict():
     predictions = model.predict(img_array)
     predicted_class = class_names[numpy.argmax(predictions)]
     confidence = float(numpy.max(predictions))
-    instructions = get_instructions("Tomato", predicted_class)
+    instructions = get_instructions(plant, predicted_class)
 
     os.remove(file_path)
 
