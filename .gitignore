@@ -35,3 +35,7 @@ coverage.xml
 
 # Database files
 *.sqlite3
+
+
+#model
+plant_disease_model.h5
