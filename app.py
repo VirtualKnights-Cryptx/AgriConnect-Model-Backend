@@ -1,19 +1,46 @@
+from flask import Flask, request, jsonify
 import tensorflow as tf
 from tensorflow.keras.preprocessing import image
-import numpy as np
+import numpy
+import os
+from geminiResponse import get_instructions
 
-model = tf.keras.models.load_model("plant_disease_model.h5")
+app = Flask(__name__)
 
-def predict_image(img_path):
-    img = image.load_img(img_path, target_size=(150, 150))
+MODEL_PATh = "plant_disease_model.h5"
+model = tf.keras.models.load_model(MODEL_PATh)
+
+class_names = ["Healthy", "Powdery", "Rust"]
+
+def preprocess_image(image_path):
+    img = image.load_img(image_path, target_size=(150, 150))
     img_array = image.img_to_array(img) / 255.0
-    img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension
+    img_array = numpy.expand_dims(img_array, axis=0)
+    return img_array
+
+@app.route("/predict", methods=["POST"])
+def predict():
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file part'}), 400
+
+    file = request.files['file']
+
+    if not file or file.filename == '':
+        return jsonify({'error': 'No selected file'}), 400
+
+    file_path = "temp.jpg"
+    file.save(file_path)
+
+    img_array = preprocess_image(file_path)
 
     predictions = model.predict(img_array)
-    class_names = ['Healthy', 'Powdery', 'Rust']
-    predicted_class = class_names[np.argmax(predictions)]
-    confidence = np.max(predictions)
+    predicted_class = class_names[numpy.argmax(predictions)]
+    confidence = float(numpy.max(predictions))
+    instructions = get_instructions("Tomato", predicted_class)
 
-    print(f"Prediction: {predicted_class} ({confidence:.2f})")
+    os.remove(file_path)
 
-predict_image("9c1e3a3aa68c7971.jpg")
+    return jsonify({"class": predicted_class, "confidence": confidence, "instructions": instructions})
+
+if __name__ == "__main__":
+    app.run(debug=True)
