@@ -3,7 +3,7 @@ name: Deploy Flask to EC2 with Docker
 on:
   push:
     branches:
-      - CI/CD-Test   # test change 3 on this branch 
+      - CI/CD-Test   # test change 4 on this branch 
 
 jobs:
   deploy:
