@@ -10,4 +10,4 @@ This project is a **Flask-based API** for detecting plant diseases (**Healthy, P
 5. **Frontend Integration**: The API is connected to an **Expo (React Native) app** for users to upload images and receive disease diagnosis.
 6. **Future Plans**: Integration with Gemini AI to provide treatment instructions.
 
-`download.png`
+![alt text](download.png)
