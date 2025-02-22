@@ -3,7 +3,7 @@ name: Deploy Flask to EC2 with Docker
 on:
   push:
     branches:
-      - main
+      - CI/CD-Test   # test change 4 on this branch 
 
 jobs:
   deploy:
@@ -24,13 +24,18 @@ jobs:
 
       - name: Deploy to EC2
         run: |
-          ssh -o StrictHostKeyChecking=no -i private_key.pem $USER@$HOST << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i private_key.pem $USER@$HOST <<EOF
+          cd ~
+          if [ ! -d "flask-backend" ]; then
+            git clone https://github.com/VirtualKnights-Cryptx/AgriConnect-Model-Backend.git flask-backend
+          fi
           cd flask-backend
           git pull origin main
-          docker compose down  # Stop running containers
-          docker compose build  # Rebuild images
-          docker compose up -d  # Restart containers
-          EOF 
+          docker compose down
+          docker compose build
+          docker compose up -d
+          EOF
+
 
       - name: Download Model from S3
         run: |
