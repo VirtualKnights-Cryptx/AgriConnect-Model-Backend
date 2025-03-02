@@ -19,10 +19,10 @@ def get_instructions(plant_type, plant_age, disease):
     Use clear and practical steps.
     """
     if disease == "Healthy":
-        response = client.models.generate_content(model="gemini-pro", contents=prompt_healthy)
+        response = client.models.generate_content(model="gemini-1.5-pro", contents=prompt_healthy)
     
     else:   
-        response = client.models.generate_content(model="gemini-pro", contents=prompt)
+        response = client.models.generate_content(model="gemini-1.5-pro", contents=prompt)
 
     instructions = response.text if response.text else "No response from Gemini AI."
     
